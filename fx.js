@@ -63,3 +63,16 @@
     });
   }).observe(document.getElementById('view'), { childList: true });
 })();
+
+// Заголовок страницы проявляется по буквам при каждой смене вкладки
+(() => {
+  if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  const t = document.getElementById('title');
+  if (!t) return;
+  const split = () => {
+    if (t.querySelector('.ch') || !t.textContent) return;
+    t.innerHTML = [...t.textContent].map((c, i) => c === ' ' ? ' ' : `<span class="ch" style="animation-delay:${i * 28}ms">${esc(c)}</span>`).join('');
+  };
+  new MutationObserver(split).observe(t, { childList: true, characterData: true, subtree: true });
+  split();
+})();

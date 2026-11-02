@@ -1,0 +1,125 @@
+/* Тема «чёрный минимализм»: поверх style.css. Чёрный фон, белый текст, один холодный акцент;
+   цвета предметов и статусов (ок/долг/ошибка) не трогаем — они несут смысл. */
+:root {
+  --bg: #000;
+  --surface: rgba(8, 8, 8, .78);
+  --surface-solid: #0a0a0a;
+  --surface2: #111;
+  --surface3: #1a1a1a;
+  --line: rgba(255, 255, 255, .07);
+  --line2: rgba(255, 255, 255, .14);
+  --text: #f5f5f5;
+  --text2: #b4b4b4;
+  --muted: #6e6e6e;
+  --accent: #d9d3ff;
+  --accent2: #e8e8e8;
+  --rose: #cfcfcf;
+  --peach: #bdbdbd;
+  --gold: #efe6c8;
+  --grad: linear-gradient(120deg, #fff, #8c8c8c);
+  --grad2: linear-gradient(120deg, #e8e8e8, #7a7a7a);
+  --r: 16px;
+}
+html, body { background: #000; }
+::selection { background: rgba(255, 255, 255, .22); }
+::-webkit-scrollbar-thumb { background: #1d1d1d; border-color: #000; }
+
+/* фон: пастельные пятна убираем, остаётся сетка точек и знаки (bg.js) */
+.bg-mesh { display: none; }
+.grain { opacity: .045; mix-blend-mode: normal; }
+
+/* боковая панель */
+.side { background: rgba(0, 0, 0, .82); border-right-color: rgba(255, 255, 255, .06); }
+.logo-mark { background: #fff; color: #000; border-radius: 12px; box-shadow: 0 0 0 1px #fff, 0 0 30px -8px rgba(255, 255, 255, .45);
+  animation: breathe 5s ease-in-out infinite; }
+.logo-mark small { background: #000; color: #fff; border: 1px solid #fff; }
+@keyframes breathe { 50% { box-shadow: 0 0 0 1px #fff, 0 0 44px -6px rgba(255, 255, 255, .6); } }
+.tabs a { border-radius: 10px; letter-spacing: .01em; }
+.tabs a:hover { background: rgba(255, 255, 255, .035); }
+.tabs a.on { background: rgba(255, 255, 255, .06); color: #fff; }
+.tabs a.on::before { background: #fff; box-shadow: 0 0 14px rgba(255, 255, 255, .7); }
+.tabs a.on svg { color: #fff; }
+.tabs a svg { transition: transform .35s var(--ease); }
+.tabs a:hover svg { transform: translateX(3px) rotate(-6deg); }
+.cd.hot { border-color: rgba(255, 255, 255, .2); background: rgba(255, 255, 255, .04); }
+.cd.hot b { color: #fff; }
+
+/* шапка: заголовок проявляется по буквам (fx.js) */
+.top h1 .ch { display: inline-block; animation: chIn .7s var(--ease) both; }
+@keyframes chIn { from { opacity: 0; transform: translateY(.45em) rotate(4deg); filter: blur(6px); } }
+.td-bar i { background: #fff; box-shadow: 0 0 10px rgba(255, 255, 255, .5); }
+
+/* карточки: тонкая рамка, свет за курсором — белый */
+.card, .kpi2, .top-detail, .cd, .side-streak { box-shadow: none; }
+.card { background: var(--surface); backdrop-filter: blur(10px); }
+.card::before { background: radial-gradient(420px circle at var(--mx, 50%) var(--my, 50%), rgba(255, 255, 255, .045), transparent 60%); }
+.card::after { background: radial-gradient(240px circle at var(--mx, 50%) var(--my, 50%), rgba(255, 255, 255, .55), transparent 70%); }
+.card-title::before { width: 6px; height: 6px; border-radius: 50%; background: #fff; box-shadow: 0 0 10px rgba(255, 255, 255, .8); animation: blinkDot 2.4s ease-in-out infinite; }
+@keyframes blinkDot { 50% { opacity: .25; } }
+.eyebrow, .cdn b, .route-sum b { background: linear-gradient(90deg, #fff, #7d7d7d, #fff); background-size: 200% 100%; -webkit-background-clip: text; background-clip: text; color: transparent; animation: sweep 6s linear infinite; }
+@keyframes sweep { to { background-position: -200% 0; } }
+.kpi2 b, .hero-num b, .clk { background: linear-gradient(180deg, #fff, #9b9b9b); -webkit-background-clip: text; background-clip: text; color: transparent; }
+
+/* главный блок: по рамке бежит белая «комета» */
+.hero { background: linear-gradient(160deg, #0d0d0d, #050505 60%) padding-box,
+  conic-gradient(from var(--ang), rgba(255, 255, 255, .05) 0 72%, rgba(255, 255, 255, .9) 82%, rgba(255, 255, 255, .05) 90%) border-box; }
+.hero::after { background: radial-gradient(circle, rgba(255, 255, 255, .06), transparent 65%); }
+.ring { background: radial-gradient(closest-side, #000 76%, transparent 78%), conic-gradient(#fff calc(var(--p) * 1%), #1c1c1c 0) !important; }
+.rank { border-color: rgba(255, 255, 255, .12); background: rgba(255, 255, 255, .03); }
+.rank-ring { background: radial-gradient(closest-side, #000 74%, transparent 76%), conic-gradient(from -90deg, #fff calc(var(--p) * 1%), rgba(255, 255, 255, .08) 0); }
+.rank-bar i, .b-bar i { background: #fff; }
+
+/* кнопки: белая с чёрным текстом, при наведении заливка «переворачивается» */
+.btn { background: #fff; color: #000; border-radius: 999px; isolation: isolate; }
+.btn::before { content: ''; position: absolute; inset: 0; z-index: -1; background: #000; transform: translateY(101%); transition: transform .45s var(--ease); border-radius: inherit; }
+.btn:hover { filter: none; box-shadow: 0 0 0 1px #fff; color: #fff; transform: translateY(-1px); }
+.btn:hover::before { transform: none; }
+.btn.glow, .btn.glow:hover { box-shadow: 0 0 0 1px #fff, 0 0 28px -8px rgba(255, 255, 255, .55); }
+.btn.glow::after { background: linear-gradient(110deg, transparent 30%, rgba(0, 0, 0, .18), transparent 70%); }
+.btn.ghost { background: transparent; color: var(--text); border: 1px solid var(--line2); }
+.btn.ghost::before { background: #fff; }
+.btn.ghost:hover { color: #000; box-shadow: none; }
+.btn.danger { background: transparent; color: var(--danger); }
+.btn.danger::before { background: var(--danger); }
+.btn.danger:hover { color: #000; box-shadow: none; }
+.chip.on, .seg button.on { background: #fff !important; color: #000 !important; border-color: #fff !important; }
+
+/* значки и тепловые клетки — оттенки серого */
+.badge.on { background: rgba(255, 255, 255, .05); border-color: rgba(255, 255, 255, .25); }
+.badge.on .b-ic { background: #fff; color: #000; box-shadow: 0 0 24px -8px rgba(255, 255, 255, .7); }
+.badge.on small { color: var(--text2); }
+.hc.l3 { background: rgba(255, 255, 255, .55); } .hc.l4 { background: #fff; box-shadow: 0 0 10px -2px #fff; }
+.w-ic { background: rgba(255, 255, 255, .07); color: #fff; }
+.w-mile i { background: #fff; box-shadow: 0 0 8px #fff; }
+.cdd.fut { background: rgba(255, 255, 255, calc(.03 + var(--h) * .14)); }
+.cdd.now { background: rgba(255, 255, 255, calc(.08 + var(--h) * .18)); }
+.cdd.today { box-shadow: inset 0 0 0 1.5px #fff, 0 0 18px -2px rgba(255, 255, 255, .6); }
+.cdd em { background: #fff; box-shadow: 0 0 6px #fff; }
+.cal-lg i.fut { background: rgba(255, 255, 255, .35); }
+.ahead { border-color: rgba(255, 255, 255, .22); background: rgba(255, 255, 255, .02); }
+.liquid svg { filter: drop-shadow(0 10px 28px rgba(255, 255, 255, .12)); }
+.lq-bg { fill: #050505; }
+.lq-w1 { fill: #f2f2f2; }
+.lq-w2 { fill: rgba(255, 255, 255, .22); }
+/* цифры поверх белой жидкости инвертируются: над жидкостью — белые, в ней — чёрные */
+.lq-txt { mix-blend-mode: difference; text-shadow: none; color: #fff; }
+.lq-txt small { color: #fff; }
+.k-ic { background: rgba(255, 255, 255, .06); color: #fff; }
+.kpi2.fire .k-ic { background: rgba(255, 255, 255, .06); color: #ff9d4d; }
+
+/* курсор: тонкое белое кольцо, на кнопках — «линза» с инверсией */
+.cur-ring { border: 1px solid rgba(255, 255, 255, .7); box-shadow: none; }
+.cur-ring.hot { background: #fff; border-color: #fff; mix-blend-mode: difference; }
+.cur-dot { box-shadow: none; }
+
+/* всплывашки и окна */
+.toast { background: #fff; color: #000; box-shadow: 0 0 0 1px #fff, 0 16px 40px -14px rgba(255, 255, 255, .4); border-radius: 999px; }
+.sheet, .modal { background: #070707 !important; border-color: rgba(255, 255, 255, .1) !important; }
+.tip { background: #0d0d0d !important; border-color: rgba(255, 255, 255, .14) !important; }
+.timer { background: rgba(0, 0, 0, .9) !important; border-color: rgba(255, 255, 255, .2) !important; }
+
+/* проявление карточек при прокрутке — с лёгким размытием */
+.card.rv { filter: blur(6px); transition: opacity .8s var(--ease), transform .8s var(--ease), filter .8s var(--ease); }
+.card.rv.in { filter: none; }
+
+@media (prefers-reduced-motion: reduce) { .top h1 .ch, .logo-mark, .card-title::before { animation: none !important; } }
