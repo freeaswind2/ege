@@ -83,8 +83,8 @@ function allLessons() {
   if (LCACHE) return LCACHE;
   const out = [];
   for (const subj in COURSE_RAW) for (const b of COURSE_RAW[subj]) for (const [d, t, title] of b.lessons) {
-    const date = ddmm(d);
-    out.push({ id: subj + '-' + date, subj, block: b.block, date, time: t, title, tasks: tagTasks(title) });
+    const date = ddmm(d.slice(0, 5)); // «07.10b» — второй урок в тот же день: буква идёт в id
+    out.push({ id: subj + '-' + date + d.slice(5), subj, block: b.block, date, time: t, title, tasks: tagTasks(title) });
   }
   for (const c of S.custom) out.push(Object.assign({ tasks: tagTasks(c.title) }, c));
   out.sort((a, b) => a.date.localeCompare(b.date) || (a.time || '').localeCompare(b.time || ''));
@@ -97,9 +97,9 @@ const lesById = id => allLessons().find(l => l.id === id);
 function planOf(subj, date) {
   const day = ((typeof PLAN !== 'undefined' ? PLAN : {})[subj] || {})[date.slice(8) + '.' + date.slice(5, 7)] || [];
   return day.map(x => {
-    const m = x.match(/^(\d\d\.\d\d)([½?]?)$/);
-    const l = m && lesById(subj + '-' + ddmm(m[1]));
-    return l ? { l, half: m[2] === '½', opt: m[2] === '?' } : { t: x.replace(/\s*·\s*[\d,]+\s*ч$/, ''), subj, h: parseFloat((x.match(/·\s*([\d,]+)\s*ч$/) || [0, '0'])[1].replace(',', '.')) };
+    const m = x.match(/^(\d\d\.\d\d)([a-z]?)([½?]?)$/);
+    const l = m && lesById(subj + '-' + ddmm(m[1]) + m[2]);
+    return l ? { l, half: m[3] === '½', opt: m[3] === '?' } : { t: x.replace(/\s*·\s*[\d,]+\s*ч$/, ''), subj, h: parseFloat((x.match(/·\s*([\d,]+)\s*ч$/) || [0, '0'])[1].replace(',', '.')) };
   });
 }
 const planDay = date => ['m', 'r', 'i'].flatMap(subj => planOf(subj, date));
