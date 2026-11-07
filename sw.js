@@ -1,5 +1,5 @@
 // Офлайн-кэш. При изменении файлов приложения — поднять версию.
-const CACHE = 'ege-v13';
+const CACHE = 'ege-v14';
 const FILES = ['./', 'index.html', 'style.css', 'theme.css', 'data.js', 'core.js', 'home.js', 'course.js', 'practice.js', 'stats.js', 'more.js', 'bg.js', 'fx.js', 'manifest.webmanifest', 'icon.svg'];
 
 self.addEventListener('install', e => {

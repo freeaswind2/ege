@@ -45,6 +45,28 @@ function planCard(x, date, i) {
   </div>`;
 }
 
+// Читательский клуб: даты личного плана, а не даты публикаций уроков в канале.
+function readingClubHtml(t) {
+  const items = planDates().flatMap(date => planOf('r', date)
+    .filter(x => x.l && /Читательский клуб/i.test(x.l.title)).map(x => ({ ...x, date })));
+  if (!items.length) return '';
+  const done = items.filter(x => isWatched(x.l)).length;
+  return `<section class="card span12 reading-club">
+    <div class="card-head"><div><div class="card-title">Читательский клуб · ${done} из ${items.length}</div>
+      <div class="muted small">По одному занятию в день · ${fmtShort(items[0].date)} — ${fmtShort(items[items.length - 1].date)} · входит в план по русскому</div></div></div>
+    <div class="lessons">${items.map(x => {
+      const w = isWatched(x.l);
+      const status = w ? 'пройдено' : x.date === t ? 'сегодня' : x.date < t ? 'переносится в хвост плана' : 'по расписанию';
+      return `<div class="lrow${w ? ' done' : ''}">
+        <button class="lcheck${w ? ' on' : ''}" data-watch="${x.l.id}" aria-label="${w ? 'Снять отметку' : 'Отметить просмотренным'}" style="--c:${SUBJECTS.r.color}">✓</button>
+        <button class="lmain" data-open="${x.l.id}"><span class="ltitle">${esc(x.l.title.replace(/^Бонус\.\s*/, ''))}</span>
+          <span class="lmeta">${fmtDate(x.date)} · ≈${hstr(planHours(x))} ч · ${status}</span></button>
+        <button class="lplay" data-sum="${x.l.id}" aria-label="Итог занятия по уроку">${IC.pen}</button>
+      </div>`;
+    }).join('')}</div>
+  </section>`;
+}
+
 // Маршрут каникул: столбик на день — высота = часы плана, заливка = сделано; флажки этапов
 function routeHtml(t) {
   const days = planDates();
@@ -302,6 +324,7 @@ VIEWS.home = () => {
       <div class="rib-legend muted small"><span><i class="cell w"></i>пройден</span><span><i class="cell d"></i>долг</span><span><i class="cell f"></i>впереди</span></div>
     </section>
 
+    ${readingClubHtml(t)}
     ${routeHtml(t)}
 
     <section class="card span12 ach">
